@@ -50,7 +50,7 @@ return deviceDao.getDevice(device_id);
 @Path("/get_device_ip/{ip_add}")
 @Produces(MediaType.APPLICATION_JSON)
 public Device getDevice(@PathParam("ip_add") String ip_add){
-return deviceDao.getDevice_based_on_ip(ip_add);
+return deviceDao.getDeviceBasedOnIP(ip_add);
 }
 
 // Insert device details
