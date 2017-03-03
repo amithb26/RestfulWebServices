@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Defines the actual implementation of methods which details what should be done specific resource is to be accessed using http methods..
  */
 package com.cloud_quotient;  
 
@@ -17,33 +15,38 @@ import java.util.List;
 import java.io.*;
 
 public class DeviceDao { 
+	
+// Get Details of all devices	
    public List<Device> getDevices(){ 
       List<Device> deviceList = null; 
       System.out.println("In DeviceDao");
       try { 
-         File file = new File("Device_details.dat"); 
-         if (!file.exists()) {
-             Device dev1 = new Device(1, "Router1", "10.0.0.1", "dev1", "dev1"); 
+         File file = new File("Device_details.dat");       // Create a new file 
+         if (!file.exists()) {				   // Check if file already exists
+             Device dev1 = new Device(1, "Router1", "10.0.0.1", "dev1", "dev1"); // Create object
              Device dev2 = new Device(2, "Router2", "10.0.0.2", "dev2", "dev2"); 
-             deviceList = new ArrayList<Device>(); 
-              System.out.println("after arraylist");
-             deviceList.add(dev1);
-             deviceList.add(dev2);
-             saveDeviceList(deviceList);   
-         } 
-         else{ 
-            FileInputStream fis = new FileInputStream(file); 
-            ObjectInputStream ois = new ObjectInputStream(fis); 
-            deviceList = (List<Device>) ois.readObject(); 
-            ois.close(); 
+             deviceList = new ArrayList<Device>(); 		//cast the device type to ARRAYLIST and store it in variable deviceList
+              //System.out.println("after arraylist");
+             deviceList.add(dev1);				//Add details of dev1 to the file 
+             deviceList.add(dev2);				//Add details of dev2 to the file
+             saveDeviceList(deviceList);   			//Save the file ( write details to output stream)
          }
-      } catch (IOException e) { 
+	 // If file with name already exists then perform the following     
+         else{ 
+            FileInputStream fis = new FileInputStream(file);    //Create an instance of FileInputStream 
+            ObjectInputStream ois = new ObjectInputStream(fis);  //Create an instance of ObjectInputStream
+            deviceList = (List<Device>) ois.readObject(); 	 // Read object 
+            ois.close(); 					// Close
+         }
+      } catch (IOException e) { 				// catch exception IOException raised in try block
          e.printStackTrace(); 
-      } catch (ClassNotFoundException e) { 
+      } catch (ClassNotFoundException e) { 			// catch exception ClassNotFound raised in try block
          e.printStackTrace(); 
       }   
       return deviceList; 
-   }  
+   }
+	
+ // Get the details of device with device_id = device_id 
    public Device getDevice(int device_id){ 
       List<Device> devices = getDevices();  
       for(Device dev: devices){ 
@@ -53,8 +56,8 @@ public class DeviceDao {
       } 
       return null; 
    } 
-   
-   public Device getDevice_based_on_ip(String ip_add){ 
+   // Get the details of device with ip_address = ip_add 
+   public Device getDeviceBasedOnIP(String ip_add){ 
 	      List<Device> devices = getDevices();  
 	      for(Device dev: devices){ 
 	         if(dev.getIPaddress().equals(ip_add)){ 
@@ -63,7 +66,7 @@ public class DeviceDao {
 	      } 
 	      return null; 
 	   } 
-	   
+  //Check if any parameter specified in the request is null   
    public int argumentCheck(Device device)
    {
     if(device.getDeviceId() == 0 || device.getDeviceName() == null || device.getIPaddress() == null || device.getLoginUsername() == null || device.getPassword() == null) {   
@@ -73,10 +76,8 @@ public class DeviceDao {
     return 1;
     }
     }
-   
-   
-   
-   
+	
+   // Add devicedetails to the output stream
    public int addDevice(Device pDevice) 
    { 
       List<Device> deviceList = getDevices(); 
@@ -90,7 +91,7 @@ public class DeviceDao {
       if(!deviceExists){
          deviceList.add(pDevice); 
          saveDeviceList(deviceList); 
-         return 1; 
+         return 1;  t
       } 
       return 0; 
    }
@@ -100,6 +101,7 @@ public class DeviceDao {
      * @param pDevice
      * @return
      */
+    // Update device details
     public int updateDeviceDetails(Device pDevice){ 
  
       List<Device> deviceList = getDevices();
@@ -129,7 +131,8 @@ public class DeviceDao {
          } 
       }   
       return 0; 
-   }  
+   } 
+    // Delete Device_details	
    public int deleteDeviceDetails(int device_id){ 
       List<Device> deviceList = getDevices(); 
       List<Device> deviceList1 = null;
@@ -144,6 +147,8 @@ public class DeviceDao {
          saveDeviceList(deviceList1); 
          return 1;
    }  
+	
+    // Save details to the output stream	
    private void saveDeviceList(List<Device> deviceList){ 
       try { 
          File file = new File("Device_details.dat"); 
